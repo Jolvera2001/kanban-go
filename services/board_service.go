@@ -10,4 +10,4 @@ const (
 	collectionName = " Boards"
 )
 
-var collection *mongo.Collection = database.CreateCollection(dbName, collectionName)
+var collection *mongo.Collection = database.GetCollection(dbName, collectionName)

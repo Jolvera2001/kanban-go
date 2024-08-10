@@ -29,6 +29,6 @@ func ConnectToMongoDB(uri string) {
 	log.Println("Connected to MongoDB!")
 }
 
-func getCollection(databaseName, collectionName string) *mongo.Collection {
+func GetCollection(databaseName, collectionName string) *mongo.Collection {
 	return MongoClient.Database(databaseName).Collection(collectionName)
 }
