@@ -2,7 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"kanban-go/database"
+	"log"
 	"net/http"
+	"os"
 )
 
 func routes(r *gin.Engine) {
@@ -33,8 +36,18 @@ func routes(r *gin.Engine) {
 }
 
 func main() {
+	// env variables
+	dbHost := os.Getenv("KB_DB")
+	if dbHost == "" {
+		log.Fatal("KB_DB environment variable not set")
+	}
+
+	// routes
 	router := gin.Default()
 	routes(router)
+
+	// init db connection
+	database.ConnectToMongoDB(dbHost)
 
 	err := router.Run(":8080")
 	if err != nil {
