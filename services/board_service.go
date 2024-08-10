@@ -13,7 +13,7 @@ const (
 	collectionName = " Boards"
 )
 
-var collection *mongo.Collection = database.GetCollection(dbName, collectionName)
+var collection = database.GetCollection(dbName, collectionName)
 
 type MongoBoardsService struct {
 	collection *mongo.Collection
@@ -35,7 +35,11 @@ func (s *MongoBoardsService) GetBoards() ([]models.Board, error) {
 		return nil, err
 	}
 
-	defer cursor.Close(context.TODO())
+	defer func() {
+		if closeErr := cursor.Close(context.TODO()); closeErr != nil {
+			err = closeErr
+		}
+	}()
 
 	boards, err = parseCursor(&boards, cursor)
 	if err != nil {
