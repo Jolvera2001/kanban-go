@@ -49,6 +49,7 @@ func BoardRoutes(r *gin.Engine) {
 
 		v1.DELETE("/board", func(c *gin.Context) {
 			var boardId string
+			// TODO: "error": "json: cannot unmarshal object into Go value of type string"
 			if err := c.ShouldBindJSON(&boardId); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
