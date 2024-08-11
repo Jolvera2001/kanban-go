@@ -1,9 +1,12 @@
 package models
 
-import "time"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 type Column struct {
-	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
-	Name      string    `json:"name" bson:"name"`
-	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
+	ID        *primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Name      string              `json:"name" bson:"name"`
+	CreatedAt time.Time           `json:"createdAt" bson:"createdAt"`
 }

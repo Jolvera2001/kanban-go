@@ -63,10 +63,21 @@ func (s *MongoBoardsService) GetBoardById(id string) (*models.Board, error) {
 
 func (s *MongoBoardsService) UpdateBoard(Board models.Board) error {
 	var filter = bson.M{"_id": Board.ID}
-	_, err := s.collection.UpdateOne(context.TODO(), filter, Board)
+	updateData, err := bson.Marshal(Board)
 	if err != nil {
 		return err
 	}
+
+	var update bson.M
+	if err = bson.Unmarshal(updateData, &update); err != nil {
+		return err
+	}
+
+	_, err = s.collection.UpdateOne(context.TODO(), filter, bson.M{"$set": update})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
