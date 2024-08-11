@@ -13,13 +13,15 @@ const (
 	collectionName = " Boards"
 )
 
-var collection = database.GetCollection(dbName, collectionName)
-
 type MongoBoardsService struct {
 	collection *mongo.Collection
 }
 
 func NewMongoBoardsService() *MongoBoardsService {
+	if database.MongoClient == nil {
+		panic("MongoClient isn't initialized for BoardService to use!")
+	}
+	collection := database.MongoClient.Database(dbName).Collection(collectionName)
 	return &MongoBoardsService{collection: collection}
 }
 
