@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"kanban-go/database"
 	"kanban-go/models"
@@ -53,7 +54,7 @@ func (s *MongoBoardsService) GetBoards() ([]models.Board, error) {
 	return boards, nil
 }
 
-func (s *MongoBoardsService) GetBoardById(id string) (*models.Board, error) {
+func (s *MongoBoardsService) GetBoardById(id primitive.ObjectID) (*models.Board, error) {
 	var board models.Board
 	var filter = bson.M{"_id": id}
 
@@ -81,7 +82,7 @@ func (s *MongoBoardsService) UpdateBoard(Board models.Board) error {
 	return nil
 }
 
-func (s *MongoBoardsService) DeleteBoard(id string) error {
+func (s *MongoBoardsService) DeleteBoard(id primitive.ObjectID) error {
 	var filter = bson.M{"_id": id}
 	_, err := s.collection.DeleteOne(context.TODO(), filter)
 	if err != nil {

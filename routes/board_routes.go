@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"kanban-go/models"
 	"kanban-go/services"
 	"net/http"
@@ -19,6 +20,24 @@ func BoardRoutes(r *gin.Engine) {
 				return
 			}
 			c.JSON(http.StatusOK, gin.H{"Boards": boards})
+		})
+
+		v1.GET("/board/:id", func(c *gin.Context) {
+			reqParam := c.Param("id")
+
+			boardId, err := primitive.ObjectIDFromHex(reqParam)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+
+			board, err := service.GetBoardById(boardId)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusOK, gin.H{"Board": board})
 		})
 
 		v1.POST("/board", func(c *gin.Context) {
@@ -48,12 +67,18 @@ func BoardRoutes(r *gin.Engine) {
 		})
 
 		v1.DELETE("/board", func(c *gin.Context) {
-			var boardId string
-			// TODO: "error": "json: cannot unmarshal object into Go value of type string"
-			if err := c.ShouldBindJSON(&boardId); err != nil {
+			var req models.IdRequest
+			if err := c.ShouldBindJSON(&req); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
 			}
+
+			boardId, err := primitive.ObjectIDFromHex(req.ID)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
 			if err := service.DeleteBoard(boardId); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
