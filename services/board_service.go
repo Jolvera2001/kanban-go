@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"kanban-go/database"
 	"kanban-go/models"
+	"time"
 )
 
 const (
@@ -21,12 +22,13 @@ func NewMongoBoardsService() *MongoBoardsService {
 	if database.MongoClient == nil {
 		panic("MongoClient isn't initialized for BoardService to use!")
 	}
-	collection := database.MongoClient.Database(dbName).Collection(collectionName)
+	collection := database.GetCollection(dbName, collectionName)
 	return &MongoBoardsService{collection: collection}
 }
 
-func (s *MongoBoardsService) CreateBoard(board models.Board) error {
-	_, err := s.collection.InsertOne(context.TODO(), board)
+func (s *MongoBoardsService) CreateBoard(boardDto models.BoardDto) error {
+	board, err := createDefaultBoard(boardDto)
+	_, err = s.collection.InsertOne(context.TODO(), board)
 	return err
 }
 
@@ -91,4 +93,16 @@ func parseCursor(boards *[]models.Board, cursor *mongo.Cursor) ([]models.Board, 
 		return nil, err
 	}
 	return *boards, nil
+}
+
+func createDefaultBoard(BoardDto models.BoardDto) (models.Board, error) {
+	var board models.Board = models.Board{
+		Name: BoardDto.Name,
+		Columns: []models.Column{
+			models.Column{},
+		},
+		CreatedAt: time.Now(),
+	}
+
+	return board, nil
 }
