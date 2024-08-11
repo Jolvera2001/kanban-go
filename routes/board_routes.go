@@ -33,5 +33,31 @@ func BoardRoutes(r *gin.Engine) {
 			}
 			c.JSON(http.StatusOK, gin.H{"status": "Board Created"})
 		})
+
+		v1.PUT("/board", func(c *gin.Context) {
+			var board models.Board
+			if err := c.ShouldBindJSON(&board); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			if err := service.UpdateBoard(board); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "Board Updated"})
+		})
+
+		v1.DELETE("/board", func(c *gin.Context) {
+			var boardId string
+			if err := c.ShouldBindJSON(&boardId); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			if err := service.DeleteBoard(boardId); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "Board Deleted"})
+		})
 	}
 }

@@ -26,8 +26,8 @@ func NewMongoBoardsService() *MongoBoardsService {
 	return &MongoBoardsService{collection: collection}
 }
 
-func (s *MongoBoardsService) CreateBoard(boardDto models.BoardDto) error {
-	board, err := createDefaultBoard(boardDto)
+func (s *MongoBoardsService) CreateBoard(BoardDto models.BoardDto) error {
+	board, err := createDefaultBoard(BoardDto)
 	_, err = s.collection.InsertOne(context.TODO(), board)
 	return err
 }
@@ -55,18 +55,18 @@ func (s *MongoBoardsService) GetBoards() ([]models.Board, error) {
 
 func (s *MongoBoardsService) GetBoardById(id string) (*models.Board, error) {
 	var board models.Board
-	var filter = bson.M{"id": id}
+	var filter = bson.M{"_id": id}
 
 	err := s.collection.FindOne(context.TODO(), filter).Decode(&board)
 	return &board, err
 }
 
-func (s *MongoBoardsService) UpdateBoard(Board *models.Board) error {
-	_, err := s.collection.UpdateByID(context.TODO(), Board.ID, Board)
+func (s *MongoBoardsService) UpdateBoard(Board models.Board) error {
+	var filter = bson.M{"_id": Board.ID}
+	_, err := s.collection.UpdateOne(context.TODO(), filter, Board)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
