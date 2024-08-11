@@ -99,7 +99,7 @@ func createDefaultBoard(BoardDto models.BoardDto) (models.Board, error) {
 	var board models.Board = models.Board{
 		Name: BoardDto.Name,
 		Columns: []models.Column{
-			models.Column{},
+			{}, // TODO: decide on what should be added for default columns
 		},
 		CreatedAt: time.Now(),
 	}
