@@ -8,7 +8,7 @@ import (
 type BoardService interface {
 	CreateBoard(BoardDto models.Board) error
 	GetBoards() ([]models.Board, error)
-	GetBoardById(id primitive.ObjectID) error
+	GetBoardById(id primitive.ObjectID) (models.Board, error)
 	UpdateBoard(Board models.Board) error
 	DeleteBoard(id primitive.ObjectID) error
 }

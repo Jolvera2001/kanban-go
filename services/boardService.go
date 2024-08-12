@@ -15,25 +15,25 @@ const (
 	collectionName = " Boards"
 )
 
-type MongoBoardsService struct {
+type BoardsService struct {
 	collection *mongo.Collection
 }
 
-func NewMongoBoardsService() *MongoBoardsService {
+func NewMongoBoardsService() *BoardsService {
 	if database.MongoClient == nil {
 		panic("MongoClient isn't initialized for BoardService to use!")
 	}
 	collection := database.GetCollection(dbName, collectionName)
-	return &MongoBoardsService{collection: collection}
+	return &BoardsService{collection: collection}
 }
 
-func (s *MongoBoardsService) CreateBoard(BoardDto models.BoardDto) error {
+func (s *BoardsService) CreateBoard(BoardDto models.BoardDto) error {
 	board, err := createDefaultBoard(BoardDto)
 	_, err = s.collection.InsertOne(context.TODO(), board)
 	return err
 }
 
-func (s *MongoBoardsService) GetBoards() ([]models.Board, error) {
+func (s *BoardsService) GetBoards() ([]models.Board, error) {
 	var boards []models.Board
 	cursor, err := s.collection.Find(context.TODO(), bson.M{})
 	if err != nil {
@@ -54,15 +54,15 @@ func (s *MongoBoardsService) GetBoards() ([]models.Board, error) {
 	return boards, nil
 }
 
-func (s *MongoBoardsService) GetBoardById(id primitive.ObjectID) (*models.Board, error) {
+func (s *BoardsService) GetBoardById(id primitive.ObjectID) (models.Board, error) {
 	var board models.Board
 	var filter = bson.M{"_id": id}
 
 	err := s.collection.FindOne(context.TODO(), filter).Decode(&board)
-	return &board, err
+	return board, err
 }
 
-func (s *MongoBoardsService) UpdateBoard(Board models.Board) error {
+func (s *BoardsService) UpdateBoard(Board models.Board) error {
 	var filter = bson.M{"_id": Board.ID}
 	updateData, err := bson.Marshal(Board)
 	if err != nil {
@@ -82,7 +82,7 @@ func (s *MongoBoardsService) UpdateBoard(Board models.Board) error {
 	return nil
 }
 
-func (s *MongoBoardsService) DeleteBoard(id primitive.ObjectID) error {
+func (s *BoardsService) DeleteBoard(id primitive.ObjectID) error {
 	var filter = bson.M{"_id": id}
 	_, err := s.collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
