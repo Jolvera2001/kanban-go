@@ -5,8 +5,8 @@ import (
 	"kanban-go/models"
 )
 
-type BoardService interface {
-	CreateBoard(BoardDto models.Board) error
+type IBoardService interface {
+	CreateBoard(BoardDto models.BoardDto) error
 	GetBoards() ([]models.Board, error)
 	GetBoardById(id primitive.ObjectID) (models.Board, error)
 	UpdateBoard(Board models.Board) error

@@ -15,25 +15,25 @@ const (
 	collectionName = " Boards"
 )
 
-type BoardsService struct {
+type BoardService struct {
 	collection *mongo.Collection
 }
 
-func NewMongoBoardsService() *BoardsService {
+func NewBoardsService() *BoardService {
 	if database.MongoClient == nil {
-		panic("MongoClient isn't initialized for BoardService to use!")
+		panic("MongoClient isn't initialized for IBoardService to use!")
 	}
 	collection := database.GetCollection(dbName, collectionName)
-	return &BoardsService{collection: collection}
+	return &BoardService{collection: collection}
 }
 
-func (s *BoardsService) CreateBoard(BoardDto models.BoardDto) error {
+func (s *BoardService) CreateBoard(BoardDto models.BoardDto) error {
 	board, err := createDefaultBoard(BoardDto)
 	_, err = s.collection.InsertOne(context.TODO(), board)
 	return err
 }
 
-func (s *BoardsService) GetBoards() ([]models.Board, error) {
+func (s *BoardService) GetBoards() ([]models.Board, error) {
 	var boards []models.Board
 	cursor, err := s.collection.Find(context.TODO(), bson.M{})
 	if err != nil {
@@ -54,7 +54,7 @@ func (s *BoardsService) GetBoards() ([]models.Board, error) {
 	return boards, nil
 }
 
-func (s *BoardsService) GetBoardById(id primitive.ObjectID) (models.Board, error) {
+func (s *BoardService) GetBoardById(id primitive.ObjectID) (models.Board, error) {
 	var board models.Board
 	var filter = bson.M{"_id": id}
 
@@ -62,7 +62,7 @@ func (s *BoardsService) GetBoardById(id primitive.ObjectID) (models.Board, error
 	return board, err
 }
 
-func (s *BoardsService) UpdateBoard(Board models.Board) error {
+func (s *BoardService) UpdateBoard(Board models.Board) error {
 	var filter = bson.M{"_id": Board.ID}
 	updateData, err := bson.Marshal(Board)
 	if err != nil {
@@ -82,7 +82,7 @@ func (s *BoardsService) UpdateBoard(Board models.Board) error {
 	return nil
 }
 
-func (s *BoardsService) DeleteBoard(id primitive.ObjectID) error {
+func (s *BoardService) DeleteBoard(id primitive.ObjectID) error {
 	var filter = bson.M{"_id": id}
 	_, err := s.collection.DeleteOne(context.TODO(), filter)
 	if err != nil {

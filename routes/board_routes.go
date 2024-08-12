@@ -8,9 +8,7 @@ import (
 	"net/http"
 )
 
-func BoardRoutes(r *gin.Engine) {
-	service := services.NewMongoBoardsService()
-
+func BoardRoutes(r *gin.Engine, service services.IBoardService) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/boards", func(c *gin.Context) {

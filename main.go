@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"kanban-go/database"
 	"kanban-go/routes"
+	"kanban-go/services"
 	"log"
 	"os"
 )
@@ -27,8 +28,10 @@ func main() {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
 
+	boardService := services.NewBoardsService()
+
 	// routes
-	routes.BoardRoutes(router)
+	routes.BoardRoutes(router, boardService)
 
 	if err = router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
