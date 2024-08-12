@@ -31,7 +31,7 @@ func TestBoardRoutes_MethodCalling(t *testing.T) {
 	}
 
 	// expectations
-	mockService.On("CreateBoard", boardDto).Return(nil)
+	mockService.On("CreateBoard", boardDto).Return(primitive.NewObjectID(), nil)
 	mockService.On("GetBoards").Return([]models.Board{board}, nil)
 	mockService.On("GetBoardById", mock.Anything).Return(board, nil)
 	mockService.On("UpdateBoard", mock.Anything).Return(nil)
@@ -70,5 +70,4 @@ func TestBoardRoutes_MethodCalling(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	mockService.AssertExpectations(t)
-
 }

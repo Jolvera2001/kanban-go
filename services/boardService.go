@@ -27,10 +27,13 @@ func NewBoardsService() *BoardService {
 	return &BoardService{collection: collection}
 }
 
-func (s *BoardService) CreateBoard(BoardDto models.BoardDto) error {
+func (s *BoardService) CreateBoard(BoardDto models.BoardDto) (primitive.ObjectID, error) {
 	board, err := createDefaultBoard(BoardDto)
-	_, err = s.collection.InsertOne(context.TODO(), board)
-	return err
+	res, err := s.collection.InsertOne(context.TODO(), board)
+	if res == nil {
+		return primitive.ObjectID{}, err
+	}
+	return res.InsertedID.(primitive.ObjectID), err
 }
 
 func (s *BoardService) GetBoards() ([]models.Board, error) {

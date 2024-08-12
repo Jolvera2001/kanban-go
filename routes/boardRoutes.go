@@ -44,11 +44,11 @@ func BoardRoutes(r *gin.Engine, service services.IBoardService) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
 			}
-			if err := service.CreateBoard(boardDto); err != nil {
+			res, err := service.CreateBoard(boardDto)
+			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
 			}
-			c.JSON(http.StatusOK, gin.H{"status": "Board Created"})
+			c.JSON(http.StatusOK, gin.H{"Board": res})
 		})
 
 		v1.PUT("/board", func(c *gin.Context) {

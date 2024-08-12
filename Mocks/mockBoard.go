@@ -10,9 +10,9 @@ type MockBoardService struct {
 	mock.Mock
 }
 
-func (m *MockBoardService) CreateBoard(BoardDto models.BoardDto) error {
+func (m *MockBoardService) CreateBoard(BoardDto models.BoardDto) (primitive.ObjectID, error) {
 	args := m.Called(BoardDto)
-	return args.Error(0)
+	return args.Get(0).(primitive.ObjectID), args.Error(1)
 }
 
 func (m *MockBoardService) GetBoards() ([]models.Board, error) {
