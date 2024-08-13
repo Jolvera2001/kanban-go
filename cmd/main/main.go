@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"kanban-go/internal/database"
 	"kanban-go/internal/routes"
 	"kanban-go/internal/services"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	err := godotenv.Load()
 	router := gin.Default()
 	connStr := os.Getenv("KB_DB")
 	if connStr == "" {
@@ -23,7 +25,7 @@ func main() {
 	//}
 
 	// init db connection
-	err := database.ConnectToMongoDB(connStr)
+	err = database.ConnectToMongoDB(connStr)
 	if err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
