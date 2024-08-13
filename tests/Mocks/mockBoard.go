@@ -3,7 +3,7 @@ package Mocks
 import (
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"kanban-go/models"
+	"kanban-go/internal/models"
 )
 
 type MockBoardService struct {

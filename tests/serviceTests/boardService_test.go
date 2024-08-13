@@ -1,15 +1,16 @@
-package services
+package serviceTests
 
 import (
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"kanban-go/database"
-	"kanban-go/models"
+	"kanban-go/internal/database"
+	"kanban-go/internal/models"
+	"kanban-go/internal/services"
 	"os"
 	"testing"
 )
 
-func NewTestBoardsService() *BoardService {
+func NewTestBoardsService() *services.BoardService {
 	connStr := os.Getenv("KB_DB")
 	err := database.ConnectToMongoDB(connStr)
 	if err != nil {
@@ -20,7 +21,7 @@ func NewTestBoardsService() *BoardService {
 		panic("MongoClient isn't initialized for IBoardService to use!")
 	}
 	collection := database.GetCollection("Test", "BoardsTest")
-	return &BoardService{collection: collection}
+	return &services.BoardService{Collection: collection}
 }
 
 func TestBoardService_CreateBoardPass(t *testing.T) {

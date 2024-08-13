@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"kanban-go/database"
-	"kanban-go/routes"
-	"kanban-go/services"
+	"kanban-go/internal/database"
+	"kanban-go/internal/routes"
+	"kanban-go/internal/services"
 	"log"
 	"os"
 )

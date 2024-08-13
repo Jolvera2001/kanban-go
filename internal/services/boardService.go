@@ -5,8 +5,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"kanban-go/database"
-	"kanban-go/models"
+	"kanban-go/internal/database"
+	models2 "kanban-go/internal/models"
 	"time"
 )
 
@@ -16,7 +16,7 @@ const (
 )
 
 type BoardService struct {
-	collection *mongo.Collection
+	Collection *mongo.Collection
 }
 
 func NewBoardsService() *BoardService {
@@ -24,21 +24,21 @@ func NewBoardsService() *BoardService {
 		panic("MongoClient isn't initialized for IBoardService to use!")
 	}
 	collection := database.GetCollection(dbName, collectionName)
-	return &BoardService{collection: collection}
+	return &BoardService{Collection: collection}
 }
 
-func (s *BoardService) CreateBoard(BoardDto models.BoardDto) (primitive.ObjectID, error) {
+func (s *BoardService) CreateBoard(BoardDto models2.BoardDto) (primitive.ObjectID, error) {
 	board, err := createDefaultBoard(BoardDto)
-	res, err := s.collection.InsertOne(context.TODO(), board)
+	res, err := s.Collection.InsertOne(context.TODO(), board)
 	if res == nil {
 		return primitive.ObjectID{}, err
 	}
 	return res.InsertedID.(primitive.ObjectID), err
 }
 
-func (s *BoardService) GetBoards() ([]models.Board, error) {
-	var boards []models.Board
-	cursor, err := s.collection.Find(context.TODO(), bson.M{})
+func (s *BoardService) GetBoards() ([]models2.Board, error) {
+	var boards []models2.Board
+	cursor, err := s.Collection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return nil, err
 	}
@@ -57,15 +57,15 @@ func (s *BoardService) GetBoards() ([]models.Board, error) {
 	return boards, nil
 }
 
-func (s *BoardService) GetBoardById(id primitive.ObjectID) (models.Board, error) {
-	var board models.Board
+func (s *BoardService) GetBoardById(id primitive.ObjectID) (models2.Board, error) {
+	var board models2.Board
 	var filter = bson.M{"_id": id}
 
-	err := s.collection.FindOne(context.TODO(), filter).Decode(&board)
+	err := s.Collection.FindOne(context.TODO(), filter).Decode(&board)
 	return board, err
 }
 
-func (s *BoardService) UpdateBoard(Board models.Board) error {
+func (s *BoardService) UpdateBoard(Board models2.Board) error {
 	var filter = bson.M{"_id": Board.ID}
 	updateData, err := bson.Marshal(Board)
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *BoardService) UpdateBoard(Board models.Board) error {
 		return err
 	}
 
-	_, err = s.collection.UpdateOne(context.TODO(), filter, bson.M{"$set": update})
+	_, err = s.Collection.UpdateOne(context.TODO(), filter, bson.M{"$set": update})
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (s *BoardService) UpdateBoard(Board models.Board) error {
 
 func (s *BoardService) DeleteBoard(id primitive.ObjectID) error {
 	var filter = bson.M{"_id": id}
-	_, err := s.collection.DeleteOne(context.TODO(), filter)
+	_, err := s.Collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return err
 	}
@@ -95,9 +95,9 @@ func (s *BoardService) DeleteBoard(id primitive.ObjectID) error {
 	return nil
 }
 
-func parseCursor(boards *[]models.Board, cursor *mongo.Cursor) ([]models.Board, error) {
+func parseCursor(boards *[]models2.Board, cursor *mongo.Cursor) ([]models2.Board, error) {
 	for cursor.Next(context.TODO()) {
-		var board models.Board
+		var board models2.Board
 		if err := cursor.Decode(&board); err != nil {
 			return nil, err
 		}
@@ -110,10 +110,10 @@ func parseCursor(boards *[]models.Board, cursor *mongo.Cursor) ([]models.Board, 
 	return *boards, nil
 }
 
-func createDefaultBoard(BoardDto models.BoardDto) (models.Board, error) {
-	var board models.Board = models.Board{
+func createDefaultBoard(BoardDto models2.BoardDto) (models2.Board, error) {
+	var board models2.Board = models2.Board{
 		Name: BoardDto.Name,
-		Columns: []models.Column{
+		Columns: []models2.Column{
 			{}, // TODO: decide on what should be added for default columns
 		},
 		CreatedAt: time.Now(),

@@ -2,7 +2,7 @@ package services
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"kanban-go/models"
+	"kanban-go/internal/models"
 )
 
 type IBoardService interface {

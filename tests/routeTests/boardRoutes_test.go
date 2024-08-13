@@ -1,4 +1,4 @@
-package routes
+package routeTests
 
 import (
 	"bytes"
@@ -7,8 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"kanban-go/Mocks"
-	"kanban-go/models"
+	models2 "kanban-go/internal/models"
+	"kanban-go/internal/routes"
+	"kanban-go/tests/Mocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -18,12 +19,12 @@ import (
 func TestBoardRoutes_MethodCalling(t *testing.T) {
 	router := gin.Default()
 	mockService := new(Mocks.MockBoardService)
-	BoardRoutes(router, mockService)
+	routes.BoardRoutes(router, mockService)
 
-	boardDto := models.BoardDto{Name: "Test Board"}
+	boardDto := models2.BoardDto{Name: "Test Board"}
 	id := primitive.NewObjectID()
 	createdTime := time.Now()
-	board := models.Board{
+	board := models2.Board{
 		ID:        &id,
 		Name:      "TestBoard",
 		CreatedAt: createdTime,
@@ -32,7 +33,7 @@ func TestBoardRoutes_MethodCalling(t *testing.T) {
 
 	// expectations
 	mockService.On("CreateBoard", boardDto).Return(primitive.NewObjectID(), nil)
-	mockService.On("GetBoards").Return([]models.Board{board}, nil)
+	mockService.On("GetBoards").Return([]models2.Board{board}, nil)
 	mockService.On("GetBoardById", mock.Anything).Return(board, nil)
 	mockService.On("UpdateBoard", mock.Anything).Return(nil)
 	mockService.On("DeleteBoard", mock.Anything).Return(nil)
@@ -62,7 +63,7 @@ func TestBoardRoutes_MethodCalling(t *testing.T) {
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	reqJSON, _ := json.Marshal(models.IdRequest{ID: boardId})
+	reqJSON, _ := json.Marshal(models2.IdRequest{ID: boardId})
 	req, _ = http.NewRequest("DELETE", "/api/v1/board", bytes.NewBuffer(reqJSON))
 	req.Header.Set("Content-Type", "application/json")
 	w = httptest.NewRecorder()

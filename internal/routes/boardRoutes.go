@@ -3,8 +3,8 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"kanban-go/models"
-	"kanban-go/services"
+	models2 "kanban-go/internal/models"
+	"kanban-go/internal/services"
 	"net/http"
 )
 
@@ -39,7 +39,7 @@ func BoardRoutes(r *gin.Engine, service services.IBoardService) {
 		})
 
 		v1.POST("/board", func(c *gin.Context) {
-			var boardDto models.BoardDto
+			var boardDto models2.BoardDto
 			if err := c.ShouldBindJSON(&boardDto); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
@@ -52,7 +52,7 @@ func BoardRoutes(r *gin.Engine, service services.IBoardService) {
 		})
 
 		v1.PUT("/board", func(c *gin.Context) {
-			var board models.Board
+			var board models2.Board
 			if err := c.ShouldBindJSON(&board); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
@@ -65,7 +65,7 @@ func BoardRoutes(r *gin.Engine, service services.IBoardService) {
 		})
 
 		v1.DELETE("/board", func(c *gin.Context) {
-			var req models.IdRequest
+			var req models2.IdRequest
 			if err := c.ShouldBindJSON(&req); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return
