@@ -10,7 +10,7 @@ export class BoardService implements IBoardService {
     }
 
     async createBoard(boardName: string): Promise<boardType> {
-        const data = { Name: boardName}
+        const data = { Name: boardName };
 
         try {
             const response = await fetch(`${this.baseApiUrl}/board`, {
@@ -33,17 +33,70 @@ export class BoardService implements IBoardService {
             return {} as boardType;
         }
     }
-    getBoards(): Promise<boardType[]> {
-        throw new Error("Method not implemented.");
+
+    async getBoards(): Promise<boardType[]> {
+        try {
+            const response = await fetch(`${this.baseApiUrl}/boards`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+
+            const json = await response.json();
+            return boardSchema.array().parse(json);
+        } catch (e) {
+            console.log(e);
+            return [] as boardType[];
+        }
     }
-    getBoardById(id: ObjectId): Promise<boardType> {
-        throw new Error("Method not implemented.");
+
+    async updateBoard(updatedBoard: boardType): Promise<string> {
+        try {
+            const response = await fetch(`${this.baseApiUrl}/board`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedBoard)
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+
+            return "Board Updated";
+        } catch (e) {
+            console.log(e);
+            return "Update Failed";
+        }
     }
-    updateBoard(updatedBoard: boardType): string {
-        throw new Error("Method not implemented.");
-    }
-    deleteBoard(id: ObjectId): string {
-        throw new Error("Method not implemented.");
+
+    async deleteBoard(id: ObjectId): Promise<string> {
+        const data = { ID: id };
+
+        try {
+            const response = await fetch(`${this.baseApiUrl}/board`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+
+            return "Deletion Successful";
+        } catch (e) {
+            console.log(e);
+            return "Deletion Failed";
+        }
     }
 }
 

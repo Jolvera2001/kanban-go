@@ -4,7 +4,6 @@ import {ObjectId} from "bson";
 export interface IBoardService {
     createBoard(boardName: string): Promise<boardType>;
     getBoards(): Promise<boardType[]>;
-    getBoardById(id: ObjectId): Promise<boardType>;
-    updateBoard(updatedBoard: boardType): string;
-    deleteBoard(id: ObjectId): string;
+    updateBoard(updatedBoard: boardType): Promise<string>;
+    deleteBoard(id: ObjectId): Promise<string>;
 }
