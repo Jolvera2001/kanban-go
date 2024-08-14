@@ -1,33 +1,32 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {boardType} from "@/models/boardType.ts";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {Separator} from "@/components/ui/separator.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [boardList, setBoardList] = useState<boardType[] | null>(null);
+  const [currBoard, setCurrBoard] = useState<boardType | null>(null);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <div className="">
+            <div className="flex flex-row h-5/6 my-2 space-x-2">
+                <div className="flex flex-col p-2 h-full">
+                    <Avatar>
+                        <AvatarImage />
+                        <AvatarFallback>TS</AvatarFallback>
+                    </Avatar>
+                </div>
+                <Separator orientation="vertical"/>
+                <div className="flex flex-col p-2 w-5/6 text-2xl">
+                    <div className="flex flex-row justify-normal mb-3">
+                        <h1>Board Name Here</h1>
+                    </div>
+                    <Separator className="w-full"/>
+                </div>
+            </div>
+        </div>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { boardType } from "@/models/boardType";
-import {IBoardService} from "@/services/iBoardService.ts";
-import {ObjectId} from "bson";
+import { IBoardService } from "@/services/iBoardService.ts";
+import { ObjectId } from "bson";
 
 export class BoardService implements IBoardService {
 
