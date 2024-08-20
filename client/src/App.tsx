@@ -13,10 +13,7 @@ function App() {
         <div className="">
             <div className="flex flex-row h-5/6 my-2 space-x-2">
                 <div className="flex flex-col p-2 h-full">
-                    <Avatar>
-                        <AvatarImage />
-                        <AvatarFallback>TS</AvatarFallback>
-                    </Avatar>
+
                 </div>
                 <Separator orientation="vertical"/>
                 <div className="flex flex-col p-2 w-5/6 text-2xl">

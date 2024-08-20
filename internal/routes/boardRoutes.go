@@ -3,12 +3,12 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"kanban-go/internal/interfaces"
 	models2 "kanban-go/internal/models"
-	"kanban-go/internal/services"
 	"net/http"
 )
 
-func BoardRoutes(r *gin.Engine, service services.IBoardService) {
+func BoardRoutes(r *gin.Engine, service interfaces.IBoardService) {
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/boards", func(c *gin.Context) {
