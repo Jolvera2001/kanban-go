@@ -10,3 +10,7 @@ type Column struct {
 	Name      string              `json:"name" bson:"name"`
 	CreatedAt time.Time           `json:"createdAt" bson:"createdAt"`
 }
+
+type ColumnDto struct {
+	Name string `json:"name"`
+}
