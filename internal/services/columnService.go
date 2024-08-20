@@ -1,9 +1,10 @@
 package services
 
 import (
-	"kanban-go/internal/database"
-
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"kanban-go/internal/database"
+	"kanban-go/internal/models"
 )
 
 const (
@@ -22,4 +23,6 @@ func NewColumnService() *ColumnService {
 	return &ColumnService{Collection: collection}
 }
 
+func (s *ColumnService) CreateColumn(ColumnDto models.Column) (primitive.ObjectID, error) {
 
+}
