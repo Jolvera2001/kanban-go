@@ -14,7 +14,7 @@ func NewTestBoardsService() *services.BoardService {
 	connStr := os.Getenv("KB_DB")
 	err := database.ConnectToMongoDB(connStr)
 	if err != nil {
-		return nil
+		panic("Failed to connect to MongoDb")
 	}
 
 	if database.MongoClient == nil {
