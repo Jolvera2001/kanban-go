@@ -12,3 +12,9 @@ type IBoardService interface {
 	UpdateBoard(Board models.Board) error
 	DeleteBoard(id primitive.ObjectID) error
 }
+
+type IColumnService interface {
+	CreateColumn(boardId primitive.ObjectID, ColumnDto models.ColumnDto) (primitive.ObjectID, error)
+	UpdateColumn(boardId primitive.ObjectID, Column models.Column) error
+	DeleteColumn(boardId primitive.ObjectID, columnId primitive.ObjectID) error
+}

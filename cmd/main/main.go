@@ -31,9 +31,11 @@ func main() {
 	}
 
 	boardService := services.NewBoardsService()
+	columnService := services.NewColumnService()
 
 	// routes
 	routes.BoardRoutes(router, boardService)
+	routes.ColumnRoutes(router, columnService)
 
 	if err = router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
