@@ -1,0 +1,28 @@
+name: Run go tests
+
+on:
+  pull_request:
+    branches:
+    - dev
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      KB_DB: ${{ secrets.KB_DB }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.22'
+
+    - name: Install dependencies
+      run: go mod tidy
+
+    - name: Run tests
+      run: go test -timeout 3m -cover -v ./tests/...
