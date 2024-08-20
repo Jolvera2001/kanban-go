@@ -12,3 +12,10 @@ type IBoardService interface {
 	UpdateBoard(Board models.Board) error
 	DeleteBoard(id primitive.ObjectID) error
 }
+
+type MongoCrud[TInput any, TOutput any] interface {
+	Create(entity TInput) (TOutput, error)
+	ReadById(id primitive.ObjectID) (TOutput, error)
+	Update(entity TInput) error
+	Delete(id primitive.ObjectID) error
+}

@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	dbName         = "Main"
 	collectionName = " Boards"
 )
 
@@ -23,12 +22,15 @@ func NewBoardsService() *BoardService {
 	if database.MongoClient == nil {
 		panic("MongoClient isn't initialized for IBoardService to use!")
 	}
-	collection := database.GetCollection(dbName, collectionName)
+	collection := database.GetCollection(database.DbName, collectionName)
 	return &BoardService{Collection: collection}
 }
 
 func (s *BoardService) CreateBoard(BoardDto models2.BoardDto) (primitive.ObjectID, error) {
 	board, err := createDefaultBoard(BoardDto)
+	if err != nil {
+		return primitive.ObjectID{}, err
+	}
 	res, err := s.Collection.InsertOne(context.TODO(), board)
 	if res == nil {
 		return primitive.ObjectID{}, err
