@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"kanban-go/internal/database"
@@ -10,6 +11,8 @@ import (
 const (
 	columnCollectionName = "Columns"
 )
+
+var notImplementedError = errors.New("not Implemented")
 
 type ColumnService struct {
 	Collection *mongo.Collection
@@ -24,5 +27,13 @@ func NewColumnService() *ColumnService {
 }
 
 func (s *ColumnService) CreateColumn(ColumnDto models.Column) (primitive.ObjectID, error) {
+	return primitive.NewObjectID(), notImplementedError
+}
 
+func (s *ColumnService) UpdateColumn(ColumnDto models.Column) error {
+	return notImplementedError
+}
+
+func (s *ColumnService) DeleteColumn(id primitive.ObjectID) error {
+	return notImplementedError
 }
